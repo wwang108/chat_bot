@@ -69,5 +69,3 @@ threadpoolctl==3.1.0
 tiktoken==0.3.3
 tokenizers==0.13.3
 toml
-torch==2.0.0
-torchvision==0.15.
