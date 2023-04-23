@@ -1,9 +1,21 @@
+version: 2.1
 orbs:
   heroku: circleci/heroku@2.0.0
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.8
+    steps:
+      - checkout
+      - run: echo "your build steps here"
 workflows:
+  version: 2
   example-workflow:
     jobs:
+      - build
       - heroku/deploy-via-git:
           api-key: ${HEROKU_API_KEY}
           app-name: chat-camo
           force: false
+          requires:
+            - build
