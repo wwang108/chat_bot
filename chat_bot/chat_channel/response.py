@@ -42,7 +42,7 @@ class CampingChatbot:
 
 
 # 示例用法：
-# os.environ['OPENAI_API_KEY'] = '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'
+# os.environ['OPENAI_API_KEY'] =
 # persist_directory = 'db'
 # embedding = OpenAIEmbeddings()
 # vectordb = Chroma(persist_directory=persist_directory,
