@@ -13,7 +13,7 @@ from langchain.document_loaders import TextLoader
 from langchain.text_splitter import CharacterTextSplitter
 import os
 # Create your views here.
-os.environ['OPENAI_API_KEY'] =
+# os.environ['OPENAI_API_KEY'] =
 # loader = TextLoader("./chat_channel/static/data/camp_knowledge.txt")
 # documents = loader.load()
 # text_splitter = CharacterTextSplitter(
