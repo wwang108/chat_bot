@@ -1,7 +1,9 @@
-version: 2.1
 orbs:
-  heroku: circleci/heroku@0.0.10
+  heroku: circleci/heroku@2.0.0
 workflows:
-  heroku_deploy:
+  example-workflow:
     jobs:
-      - heroku/deploy-via-git
+      - heroku/deploy-via-git:
+          api-key: ${HEROKU_API_KEY}
+          app-name: chat-camo
+          force: false
