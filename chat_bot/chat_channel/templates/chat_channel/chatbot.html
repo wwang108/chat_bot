@@ -58,35 +58,40 @@
     }
 
     chatForm.addEventListener('submit', (event) => {
-      event.preventDefault();
-      const formData = new FormData(chatForm);
-      const message = formData.get('message');
-      chatLog.innerHTML += `
-        <div class="chat-message chat-message-user mb-3">
-          <div class="p-2 rounded bg-primary text-white d-inline-block float-right">
-            <span>${message}</span>
-          </div>
+  event.preventDefault();
+  const formData = new FormData(chatForm);
+  const message = formData.get('message');
+  chatLog.innerHTML += `
+    <div class="chat-message chat-message-user mb-3">
+      <div class="p-2 rounded bg-primary text-white d-inline-block float-right">
+        <span>${message}</span>
+      </div>
+    </div>
+  `;
+  sendButton.disabled = true;
+  scrollToBottom();
+
+  // 清空输入框
+  document.querySelector('#id_message').value = '';
+
+  fetch('/chatbot/', {
+    method: 'POST',
+    body: formData,
+  })
+  .then(response => response.json())
+  .then(data => {
+    const responseMessage = data.message;
+    chatLog.innerHTML += `
+      <div class="chat-message chat-message-bot mb-3">
+        <div class="p-2 rounded bg-light d-inline-block">
+          <span>${responseMessage}</span>
         </div>
-      `;
-      sendButton.disabled = true;
-      scrollToBottom();
-      fetch('/chatbot/', {
-        method: 'POST',
-        body: formData,
-      })
-      .then(response => response.json())
-      .then(data => {
-        const responseMessage = data.message;
-        chatLog.innerHTML += `
-          <div class="chat-message chat-message-bot mb-3">
-            <div class="p-2 rounded bg-light d-inline-block">
-              <span>${responseMessage}</span>
-            </div>
-          </div>
-        `;
-        sendButton.disabled = false;
-        scrollToBottom();
-      });
-    });
+      </div>
+    `;
+    sendButton.disabled = false;
+    scrollToBottom();
+  });
+});
+
   </script>
 {% endblock %}
