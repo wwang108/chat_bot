@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-import django_heroku
 import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'chat_channel',
     'widget_tweaks',
-    'storages'
 
 ]
 

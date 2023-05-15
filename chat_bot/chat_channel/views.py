@@ -6,7 +6,6 @@ from django.http import JsonResponse
 import subprocess
 import json
 from django.views.decorators.csrf import csrf_exempt
-from langchain.vectorstores import Chroma
 from langchain.embeddings.openai import OpenAIEmbeddings
 from .response import CampingChatbot
 from langchain.document_loaders import TextLoader
@@ -16,6 +15,20 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from .forms import CustomUserCreationForm
+from langchain.chains import RetrievalQA
+from langchain.llms import OpenAIChat
+from langchain.vectorstores import DeepLake
+import re
+
+def format_code_blocks(api_response_text):
+    # Search for code blocks wrapped in triple backticks
+    code_block_pattern = re.compile(r'```(.*?)```', re.DOTALL)
+    
+    # Replace the triple backticks with HTML pre and code tags
+    formatted_text = code_block_pattern.sub(r'<pre><code>\1</code></pre>', api_response_text)
+    
+    return formatted_text
+
 
 # Create your views here.
 # loader = TextLoader("./chat_channel/static/data/camp_knowledge.txt")
@@ -23,39 +36,11 @@ from .forms import CustomUserCreationForm
 # text_splitter = CharacterTextSplitter(
 #     chunk_size=1000, separator="\n", chunk_overlap=0)
 # documents = text_splitter.split_documents(documents)
-os.environ['OPENAI_API_KEY'] =
-persist_directory = 'chat_channel/db'
-embedding = OpenAIEmbeddings()
-vectordb = Chroma(persist_directory=persist_directory,
-                  embedding_function=embedding)
-vectorstore = vectordb  # 使用前面的方法创建一个Chroma对象
-chat = CampingChatbot(vectorstore)
+os.environ['OPENAI_API_KEY'] = 
+embeddings = OpenAIEmbeddings()
+dataset_path = "chat_channel/my_deeplake/"
+chat = CampingChatbot(dataset_path=dataset_path, embeddings=embeddings)
 
-
-def home(request):
-    return render(request, "chat_channel/camping_home.html")
-
-
-def homepage(request):
-    return render(request, "chat_channel/homepage.html")
-
-
-def chatbot(req):
-    return HttpResponse('<h1>欢迎进入露营</h1>')
-
-
-@login_required
-def reservation_view(request):
-    # if request.method == 'POST':
-    #     form = ReservationForm(request.POST)
-    #     # if form.is_valid():
-    #     # form.save()
-    #     # 这里可以添加预定成功后的操作，例如重定向到其他页面
-    # else:
-    form = ReservationForm()
-
-    context = {'form': form}
-    return render(request, 'chat_channel/reservation.html', context)
 
 
 @login_required
@@ -70,6 +55,9 @@ def chatbot(request):
         if user_message:
             response_message = chat.receive_message(user_message)
             print(response_message)
+            formatted_text = format_code_blocks(response_message)
+            response_message = formatted_text
+            print(response_message)
         else:
             response_message = 'Hi, how can I help you?'
 
@@ -78,15 +66,15 @@ def chatbot(request):
         return render(request, 'chat_channel/chatbot.html', {'form': form})
 
 
-def signup(request):
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            # Log the user in.
-            login(request, user)
-            # Change 'home' to the name of the view you want to redirect the user to after signup
-            return redirect('home')
-    else:
-        form = CustomUserCreationForm()
-    return render(request, 'chat_channel/signup.html', {'form': form})
+# def signup(request):
+#     if request.method == 'POST':
+#         form = CustomUserCreationForm(request.POST)
+#         if form.is_valid():
+#             user = form.save()
+#             # Log the user in.
+#             login(request, user)
+#             # Change 'home' to the name of the view you want to redirect the user to after signup
+#             return redirect('home')
+#     else:
+#         form = CustomUserCreationForm()
+#     return render(request, 'chat_channel/signup.html', {'form': form})

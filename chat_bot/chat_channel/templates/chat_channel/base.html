@@ -20,24 +20,24 @@
       background-attachment: fixed;
       }
     </style>
+    <style>
+      .chat-history {
+        height: 500px; /* Adjust the height as desired */
+        width: 100%; /* Adjust the width as desired */
+        overflow-y: scroll;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      </style>
   </head>
   <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-      <a class="navbar-brand" href="{% url 'home' %}">Camping</a>
+      <a class="navbar-brand" href="{% url 'chatbot' %}">Simwrapper helper</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'homepage' %}">Homepage</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'reservation' %}">Reservation</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'chatbot' %}">Chatbot</a>
-          </li>
         </ul>
         <ul class="navbar-nav ml-auto">
           {% if user.is_authenticated %}
@@ -48,15 +48,7 @@
             <li class="nav-item">
               <a class="nav-link btn btn-primary" href="{% url 'login' %}">Login</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link btn btn-outline-primary" href="{% url 'signup' %}">Sign Up</a>
-            </li>
           {% endif %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'home' %}">
-              <img src="{% static 'images/icon.jpeg' %}" alt="Icon" width="30" height="30" class="rounded">
-            </a>
-          </li>
         </ul>
       </div>
     </nav>
